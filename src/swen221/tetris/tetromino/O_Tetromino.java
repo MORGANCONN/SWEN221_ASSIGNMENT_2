@@ -20,12 +20,12 @@ public class O_Tetromino extends AbstractTetromino {
 
 	@Override
 	public boolean isWithin(int x, int y) {
-		return x >= 0 && x < 2 && y >= 0 && y <= 1;
+		return x >= 0 && x <= 1 && y >= 0 && y <= 1;
 	}
 
 	@Override
 	public Rectangle getBoundingBox() {
-		return new Rectangle(-1, 1, 1, -1);
+		return new Rectangle(0, 1, 2, 0);
 	}
 
 	@Override

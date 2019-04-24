@@ -322,6 +322,7 @@ public class Tetris extends JFrame {
 					synchronized(game) {
 						// apply gravity, etc.
 						game.clock();
+
 						// check whether reached game over state
 						gameOver = game.isGameOver();
 						//

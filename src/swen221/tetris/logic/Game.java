@@ -3,14 +3,10 @@
 // You may not distribute it in any other way without permission.
 package swen221.tetris.logic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.awt.*;
+import java.util.*;
 
-import swen221.tetris.moves.DropMove;
-import swen221.tetris.moves.Move;
-import swen221.tetris.moves.ClockwiseRotation;
-import swen221.tetris.moves.AbstractTranslation;
+import swen221.tetris.moves.*;
 import swen221.tetris.tetromino.*;
 
 /**
@@ -144,24 +140,46 @@ public class Game {
 		//
 		ActiveTetromino activeTetromino = board.getActiveTetromino();
 		// Check whether it has landed
-		if (activeTetromino != null) {
-			// apply gravity
-			activeTetromino = activeTetromino.translate(0, -1);
-		} else if(board.canPlaceTetromino(nextTetromino)){
-			// promote next tetromino to be active
-			activeTetromino = nextTetromino;
-			// select the next one in sequence
-			nextTetromino = nextActiveTetromino();
-		} else {
-			// indicates game over status
+			if (activeTetromino != null && !activeTetromino.getHasLanded()) {
+				// Gravity Movement
+				hasLanded(activeTetromino);
+				if(!activeTetromino.getHasLanded()){
+					activeTetromino = activeTetromino.translate(0, -1);
+				}
+			} else if (board.canPlaceTetromino(nextTetromino)) {
+				// promote next tetromino to be active
+				activeTetromino = nextTetromino;
+				// select the next one in sequence
+                if(tetrominoSequence.hasNext()) {
+                    nextTetromino = nextActiveTetromino();
+                }
+			} else {
+
+			}
+			board.setActiveTetromino(activeTetromino);
 		}
-		board.setActiveTetromino(activeTetromino);
-	}
+
 
 	// ======================================================================
 	// Helper methods
 	// ======================================================================
 
+	/**
+	 * Checks if the specified tetromino has landed
+	 * @param tetromino the tetromino to check
+	 */
+	private void hasLanded(ActiveTetromino tetromino){
+		Rectangle boundingBox = tetromino.getBoundingBox();
+		if(isWithinBoard(tetromino)){
+			if(checkIfAtBottom(tetromino)){
+				// Case 2: reached the bottom of the board
+				lockTetromino(tetromino);
+			}else if(checkForTetrominosBelow(tetromino)){
+				// Case 1: encountered tetromino below current position
+				lockTetromino(tetromino);
+			}
+		}
+	}
 	/**
 	 * Determine the next active tetromino for the board.
 	 *
@@ -173,5 +191,60 @@ public class Game {
 		int cy = board.getHeight() - 2;
 		// set next tetromino
 		return new ActiveTetromino(cx, cy, tetrominoSequence.next());
+	}
+
+	/**
+	 * Checks if the specified tetromino is within the board
+	 * @param tetromino the tetromino to check
+	 * @return
+	 */
+	private boolean isWithinBoard(ActiveTetromino tetromino){
+		Rectangle boundingBox = tetromino.getBoundingBox();
+		if(boundingBox.getMinX()>=0&&boundingBox.getMinY()>=0){
+			if(boundingBox.getMaxX()<=board.getWidth()&&boundingBox.getMaxY()<=board.getHeight()){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkForTetrominosBelow(ActiveTetromino tetromino){
+		Board tempBoard = new Board(board);
+		ActiveTetromino movedTetromino = board.getActiveTetromino().translate(0,-1);
+		tempBoard.setActiveTetromino(movedTetromino);
+		Rectangle boundingBox = movedTetromino.getBoundingBox();
+		for(int y = boundingBox.getMinY();y<= boundingBox.getMaxY();y++){
+			for(int x = boundingBox.getMinX();x<=boundingBox.getMaxX();x++){
+				if( board.getTetrominoAt(x,y) != board.getActiveTetromino() && board.getTetrominoAt(x,y)!=null){
+					if(movedTetromino.isWithin(x,y)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public void lockTetromino(ActiveTetromino tetromino){
+		Rectangle boundingBox = tetromino.getBoundingBox();
+		tetromino.setHasLanded(true);
+		for(int y = boundingBox.getMinY();y<=boundingBox.getMaxY();y++){
+			for(int x = boundingBox.getMinX();x<=boundingBox.getMaxX();x++){
+				if(tetromino.isWithin(x,y)) {
+					board.setPlacedTetrominoAt(x, y, tetromino);
+				}
+			}
+		}
+	}
+
+	public boolean checkIfAtBottom(ActiveTetromino tetromino){
+		Board tempBoard = new Board(board);
+		ActiveTetromino movedTetromino = tempBoard.getActiveTetromino().translate(0,-1);
+		tempBoard.setActiveTetromino(movedTetromino);
+		Rectangle boundingBox = movedTetromino.getBoundingBox();
+		if(boundingBox.getMinY()<0){
+			return true;
+		}
+		return false;
 	}
 }

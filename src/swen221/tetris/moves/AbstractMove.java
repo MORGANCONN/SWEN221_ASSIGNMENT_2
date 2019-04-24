@@ -5,6 +5,7 @@ package swen221.tetris.moves;
 
 import swen221.tetris.logic.Board;
 import swen221.tetris.logic.Rectangle;
+import swen221.tetris.tetromino.ActiveTetromino;
 import swen221.tetris.tetromino.Tetromino;
 
 /**
@@ -18,10 +19,26 @@ public abstract class AbstractMove implements Move {
 
 	@Override
 	public boolean isValid(Board board) {
-		// NOTE: to check whether move is valid or not, you can employ step() below to
-		// compute the new board and then check whether the active tetromino is in a
-		// valid position.
-		return true;
+		Board tempBoard = step(board);
+		Rectangle boundingBox = tempBoard.getActiveTetromino().getBoundingBox();
+		ActiveTetromino activeTetromino = tempBoard.getActiveTetromino();
+		if(boundingBox.getMinX()>=0&&boundingBox.getMaxX()<board.getWidth()){
+			if(boundingBox.getMinY()>=1&&boundingBox.getMaxY()<board.getHeight()) {
+				for(int y = boundingBox.getMinY();y<= boundingBox.getMaxY();y++){
+					for(int x = boundingBox.getMinX();x<=boundingBox.getMaxX();x++){
+						if( board.getTetrominoAt(x,y) != board.getActiveTetromino() && board.getTetrominoAt(x,y)!=null){
+							if(activeTetromino.isWithin(x,y)) {
+								return false;
+							}
+						}
+					}
+				}
+				return true;
+			} else{
+				return false;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -32,4 +49,5 @@ public abstract class AbstractMove implements Move {
 	 * @param board
 	 */
 	protected abstract Board step(Board board);
+
 }

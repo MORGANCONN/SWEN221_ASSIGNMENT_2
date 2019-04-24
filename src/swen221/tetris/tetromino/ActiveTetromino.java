@@ -32,6 +32,12 @@ public class ActiveTetromino implements Tetromino {
 	 */
 	protected final int y;
 
+	/**
+	 * Boolean that indicates if the tetromino has landed
+	 */
+
+	protected boolean hasLanded = false;
+
 	public ActiveTetromino(int x, int y, Tetromino tetromino) {
 		if (tetromino == null) {
 			throw new IllegalArgumentException("invalid tetromino!");
@@ -39,6 +45,22 @@ public class ActiveTetromino implements Tetromino {
 		this.x = x;
 		this.y = y;
 		this.tetromino = tetromino;
+	}
+
+	/**
+	 * Gets the current status of hasLanded
+	 * @return
+	 */
+	public boolean getHasLanded(){
+		return hasLanded;
+	}
+
+	/**
+	 * Sets the state of hasLanded
+	 * @param state the state to set it to
+	 */
+	public void setHasLanded(boolean state){
+		hasLanded = state;
 	}
 
 	@Override
