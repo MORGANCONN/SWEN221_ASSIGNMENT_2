@@ -44,7 +44,7 @@ public abstract class AbstractTranslation extends AbstractMove implements Move {
 		// Create copy of the board to prevent modifying its previous state.
 		board = new Board(board);
 		// Apply translation for this move
-		ActiveTetromino tetromino = board.getActiveTetromino().translate(dx, dy);
+ 		ActiveTetromino tetromino = board.getActiveTetromino().translate(dx, dy);
 		// Apply the move to the new board.
 		board.setActiveTetromino(tetromino);
 		// Return updated version of board

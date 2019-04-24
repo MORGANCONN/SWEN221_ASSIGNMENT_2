@@ -25,7 +25,7 @@ public class O_Tetromino extends AbstractTetromino {
 
 	@Override
 	public Rectangle getBoundingBox() {
-		return new Rectangle(0, 1, 2, 0);
+		return new Rectangle(0, 1, 1, 0);
 	}
 
 	@Override

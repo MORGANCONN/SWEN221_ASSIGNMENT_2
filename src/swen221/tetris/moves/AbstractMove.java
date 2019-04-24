@@ -23,7 +23,7 @@ public abstract class AbstractMove implements Move {
 		Rectangle boundingBox = tempBoard.getActiveTetromino().getBoundingBox();
 		ActiveTetromino activeTetromino = tempBoard.getActiveTetromino();
 		if(boundingBox.getMinX()>=0&&boundingBox.getMaxX()<board.getWidth()){
-			if(boundingBox.getMinY()>=1&&boundingBox.getMaxY()<board.getHeight()) {
+			if(boundingBox.getMinY()>=0&&boundingBox.getMaxY()<board.getHeight()) {
 				for(int y = boundingBox.getMinY();y<= boundingBox.getMaxY();y++){
 					for(int x = boundingBox.getMinX();x<=boundingBox.getMaxX();x++){
 						if( board.getTetrominoAt(x,y) != board.getActiveTetromino() && board.getTetrominoAt(x,y)!=null){

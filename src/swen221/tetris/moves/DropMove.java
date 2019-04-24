@@ -4,6 +4,7 @@
 package swen221.tetris.moves;
 
 import swen221.tetris.logic.Board;
+import swen221.tetris.logic.Game;
 import swen221.tetris.logic.Rectangle;
 import swen221.tetris.tetromino.ActiveTetromino;
 import swen221.tetris.tetromino.O_Tetromino;
@@ -32,31 +33,21 @@ public class DropMove extends AbstractMove {
 	public Board apply(Board board) {
 		boolean otherTetrominoFound = false;
 		// Create copy of the board to prevent modifying its previous state.
-		Board tempBoard = new Board(board);
+		board = new Board(board);
 		// Create a copy of this board which will be updated.
 		ActiveTetromino tetromino = board.getActiveTetromino();
 		Rectangle boundingBox = tetromino.getBoundingBox();
-		for(int y = (boundingBox.getMaxY()-boundingBox.getMinY())/2;y<board.getHeight();y = y + boundingBox.getMaxY()-boundingBox.getMinY()){
-			ActiveTetromino movedTetromino = tetromino.translate(0, y - ((boundingBox.getMaxY()-boundingBox.getMinY())/2+boundingBox.getMinY()));
-			Rectangle tempBoundingBox = movedTetromino.getBoundingBox();
-			if(tempBoundingBox.getMinX()>=0&&tempBoundingBox.getMaxX()<board.getWidth()){
-				if(tempBoundingBox.getMinY()>=1&&tempBoundingBox.getMaxY()<board.getHeight()) {
-					for(int y1 = tempBoundingBox.getMinY();y1<= tempBoundingBox.getMaxY();y1++){
-						for(int x = tempBoundingBox.getMinX();x<=tempBoundingBox.getMaxX();x++){
-							if( board.getTetrominoAt(x,y1) != board.getActiveTetromino() && board.getTetrominoAt(x,y)!=null){
-								if(movedTetromino.isWithin(x,y1)) {
-									otherTetrominoFound = true;
-								}
-							}
-						}
-					}
-				}
+		board.setActiveTetromino(tetromino);
+		while (!Game.checkIfAtBottom(tetromino,board)){
+			if(!Game.checkForTetrominosBelow(tetromino,board)) {
+				tetromino = board.getActiveTetromino().translate(0, -1);
+				board.setActiveTetromino(tetromino);
+			} else if(Game.checkForTetrominosBelow(tetromino,board)){
+				break;
 			}
 		}
-		// Apply the move to the new board, rather than to this board.
-		tempBoard.setActiveTetromino(tetromino);
 		// Return updated version of this board.
-		return tempBoard;
+		return board;
 
 	}
 
