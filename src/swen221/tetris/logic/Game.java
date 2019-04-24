@@ -154,11 +154,13 @@ public class Game {
             if (board.getActiveTetromino() != null) {
                 lockTetromino(board.getActiveTetromino());
             }
-            // promote next tetromino to be active
-            activeTetromino = nextTetromino;
-            // select the next one in sequence
-            if (tetrominoSequence.hasNext()) {
-                nextTetromino = nextActiveTetromino();
+            if(board.canPlaceTetromino(nextTetromino)) {
+                // promote next tetromino to be active
+                activeTetromino = nextTetromino;
+                // select the next one in sequence
+                if (tetrominoSequence.hasNext()) {
+                    nextTetromino = nextActiveTetromino();
+                }
             }
         } else {
 
