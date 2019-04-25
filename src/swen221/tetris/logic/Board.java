@@ -4,6 +4,7 @@
 package swen221.tetris.logic;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import swen221.tetris.tetromino.ActiveTetromino;
@@ -192,6 +193,58 @@ public class Board {
 				if (t.isWithin(x, y)) {
 					cells[(y * width) + x] = t;
 				}
+			}
+		}
+	}
+
+	/**
+	 * Checks the board for full lines and if there are any present the line is cleared and the rest
+	 * of the board is moved down
+	 */
+	public void checkForFullLines(){
+		HashSet<Integer> rowsToClear = new HashSet<>();
+		for(int y = 0;y<=height;y++){
+			if(checkRow(y)){
+				rowsToClear.add(y);
+			}
+		}
+		if (rowsToClear.size()>0){
+			for(Integer i : rowsToClear){
+				clearRow(i);
+			}
+		}
+	}
+
+	/**
+	 * Checks if the supplied row is full and returns a boolean representing this
+	 * @param y row to check
+	 * @return
+	 */
+	public boolean checkRow(Integer y){
+		for(int x = 0;x<getWidth();x++){
+			int id = (y * width) + x;
+			if(cells[id]==null){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Clears the supplied row and adjusts the rest of the board
+	 * @param y the row to be cleared
+	 */
+	public void clearRow(Integer y){
+		for(int x = 0;x<width;x++){
+			int id = (y * width) + x;
+			cells[id] = null;
+		}
+		Tetromino[] cellsCopy = Arrays.copyOf(cells,cells.length);
+		for(int newY = y;newY<height-1;newY++){
+			for(int x = 0;x<width;x++){
+				int oldId = (y * width) + x;
+				int newId = ((y+1)*width) + x;
+				cellsCopy
 			}
 		}
 	}

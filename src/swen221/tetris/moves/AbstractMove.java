@@ -19,6 +19,9 @@ public abstract class AbstractMove implements Move {
 
 	@Override
 	public boolean isValid(Board board) {
+		if(board.getActiveTetromino().getHasLanded()){
+			return false;
+		}
 		Board tempBoard = step(board);
 		Rectangle boundingBox = tempBoard.getActiveTetromino().getBoundingBox();
 		ActiveTetromino activeTetromino = tempBoard.getActiveTetromino();

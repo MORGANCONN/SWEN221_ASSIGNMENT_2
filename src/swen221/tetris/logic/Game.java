@@ -147,13 +147,13 @@ public class Game {
             hasLanded(activeTetromino);
             if (!activeTetromino.getHasLanded()) {
                 activeTetromino = activeTetromino.translate(0, -1);
+            } else{
+                if (board.getActiveTetromino() != null) {
+                    lockTetromino(board.getActiveTetromino());
+                }
             }
         } else if (board.canPlaceTetromino(nextTetromino)) {
             //Locks current tetromino
-            needToBeLocked = false;
-            if (board.getActiveTetromino() != null) {
-                lockTetromino(board.getActiveTetromino());
-            }
             if(board.canPlaceTetromino(nextTetromino)) {
                 // promote next tetromino to be active
                 activeTetromino = nextTetromino;
@@ -260,4 +260,6 @@ public class Game {
         }
         return false;
     }
+
+
 }
