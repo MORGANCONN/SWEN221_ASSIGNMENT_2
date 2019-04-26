@@ -150,6 +150,8 @@ public class Game {
             } else{
                 if (board.getActiveTetromino() != null) {
                     lockTetromino(board.getActiveTetromino());
+                    activeTetromino = null;
+                    board.checkForFullLines();
                 }
             }
         } else if (board.canPlaceTetromino(nextTetromino)) {

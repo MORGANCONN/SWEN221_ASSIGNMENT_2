@@ -203,7 +203,7 @@ public class Board {
 	 */
 	public void checkForFullLines(){
 		HashSet<Integer> rowsToClear = new HashSet<>();
-		for(int y = 0;y<=height;y++){
+		for(int y = 0;y<height;y++){
 			if(checkRow(y)){
 				rowsToClear.add(y);
 			}
@@ -221,6 +221,7 @@ public class Board {
 	 * @return
 	 */
 	public boolean checkRow(Integer y){
+		boolean validmove = false;
 		for(int x = 0;x<getWidth();x++){
 			int id = (y * width) + x;
 			if(cells[id]==null){
@@ -244,8 +245,11 @@ public class Board {
 			for(int x = 0;x<width;x++){
 				int oldId = (y * width) + x;
 				int newId = ((y+1)*width) + x;
-				cellsCopy
+				cellsCopy[oldId] = cells[newId];
 			}
+		}
+		for(int i = 0;i<cells.length;i++){
+			cells[i] = cellsCopy[i];
 		}
 	}
 
