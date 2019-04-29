@@ -241,10 +241,10 @@ public class Board {
 			cells[id] = null;
 		}
 		Tetromino[] cellsCopy = Arrays.copyOf(cells,cells.length);
-		for(int newY = y;newY<height-1;newY++){
-			for(int x = 0;x<width;x++){
-				int oldId = (y * width) + x;
-				int newId = ((y+1)*width) + x;
+		for(int newY = y;newY<height-2;newY++){
+			for(int x = 0;x<=width;x++){
+				int oldId = (newY * width) + x;
+				int newId = ((newY+1)*width) + x;
 				cellsCopy[oldId] = cells[newId];
 			}
 		}
